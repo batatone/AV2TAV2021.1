@@ -1,0 +1,9 @@
+flask[async]
+flask-sqlalchemy
+mysqlclient
+Flask-WTF
+pytest flask
+requests
+aiohttp
+wheel
+pycryptodome
