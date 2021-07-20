@@ -1,0 +1,193 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+{% block title %} Dentista {% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+            <div class="jumbotron p-3">
+                <h2>Área para <b>Dentistas</b>
+                    <button type="button"  class="btn btn-success float-right"
+                data-toggle="modal" data-target="#mymodal"  id="opaddorc">Faz Orçamento</button> </h2>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissable" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                {{message}}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
+                    <form action="/api" method="POST">
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <input type="number" class="form-control" name="x" id="x" placeholder="Número do pedido mais recente" aria-label="Número do pedido mais recente" aria-describedby="send">
+                                <button type="submit" class="btn btn-dark" id="send">&#10003;</button>
+                            </div>
+                        </div>
+                    </form>
+                <table class="table table-hover table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>ID do Procedimento</th>
+                        <th>Dente ou Prótese</th>
+                        <th>Descrição do Procedimento</th>
+                        <th>ID do Dentista</th>
+                        <th>Data de Avaliação</th>
+                        <th>Assinatura do Dentista</th>
+                        <th>Valor</th>
+                        <th>Ações</th>
+                    </tr>
+                   {% for row in orcamentos %}
+                    <tr>
+                        <td>{{row.idorc}}</td>
+                        <td>{{row.idproc}}</td>
+                        <td>{{row.denprot}}</td>
+                        <td>{{row.descproc}}</td>
+                        <td>{{row.identista}}</td>
+                        <td>{{row.dataaval}}</td>
+                        <td>{{row.ass}}</td>
+                        <td>{{row.valor}}</td>
+                        <td>
+                            <a href="/updateo/{{row.idorc}}" id="opedorc{{row.idorc}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.idorc}}">Edit</a>
+                            <a href="/deleteo/{{row.idorc}}" id="delorc{{row.idorc}}" class="btn btn-danger btn-xs" onclick="return confirm('Deseja mesmo deletar?')">Delete</a>
+                        </td>
+                    </tr>
+
+<div id="modaledit{{row.idorc}}" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title">Alterar Informação</h4>
+         </div>
+         <div class="modal-body">
+            <form action="{{url_for('updateo')}}" method="POST">
+                <div class="form-group">
+                {% for row in tabela %}
+                <input type="hidden" id="{{row.idp}}00" value="{{row.val}}">
+                {% endfor %}
+                    <input type="hidden" id="orcedidorc" name="idorc" value="{{row.idorc}}">
+                    <label>ID do Procedimento:</label>
+                    <select class="form-control" name="idproc" id="idpa" onChange="FuncUpdate(event)" required>
+                    <option value="">0</option>
+                    {% for row in tabela %}
+                    <option value="{{row.idp}}" content="{{row.val}}">{{row.idp}}</option>
+                    {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Descrição do Dente (ou Prótese):</label>
+                    <input type="text" class="form-control" id="orceddenprot" name="denprot" value="{{row.denprot}}">
+                </div>
+                <div class="form-group">
+                    <label>Descrição do Procedimento:</label>
+                    <input type="text" class="form-control" id="orceddescproc" name="descproc" value="{{row.descproc}}">
+                </div>
+                <div class="form-group">
+                  <label>ID do Dentista:</label>
+                  <input type="number" class="form-control" id="orcedident" name="identista" value="{{row.identista}}">
+                </div>
+                <div class="form-group">
+                  <label>Data da Avaliação:</label>
+                  <input type="date" class="form-control" id="orceddataval" name="dataaval" value="{{row.dataaval}}">
+                </div>
+                <div class="form-group">
+                  <label>Assinatura do Dentista:</label>
+                  <input type="text" class="form-control" id="orcedass" name="ass" value="{{row.ass}}" readonly>
+                  <input type="hidden" class="form-control" id="orceddass" name="dass" value="{{row.dass}}">
+                  <input type="hidden" class="form-control" id="orcedkey" name="key" value="{{row.key}}">
+                </div>
+                <div class="form-group">
+                    <label>Valor:</label>
+                    <input type="text" class="form-control" id="updateval" name="valor" value="{{row.valor}}" readonly>
+                </div>
+                <div class="form-group">
+                  <button class="btn btn-primary" id="subedorc" type="submit">Update</button>
+               </div>
+            </form>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="closedorc" data-dismiss="modal">Close</button>
+         </div>
+      </div>
+   </div>
+</div>
+{% endfor %}
+                </table>
+            </div>
+<div id="mymodal" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title">Add Cliente</h4>
+         </div>
+         <div class="modal-body">
+            <form action="{{url_for('inserto')}}" method="POST">
+               <div class="form-group">
+                {% for row in tabela %}
+                <input type="hidden" id="{{row.idp}}0" value="{{row.val}}">
+                {% endfor %}
+                    <label>ID do Procedimento:</label>
+                    <select class="form-control" name="idproc" id="idpb" onChange="FuncInsert(event)" required>
+                    <option value="">0</option>
+                    {% for row in tabela %}
+                       <option value="{{row.idp}}" content="{{row.val}}">{{row.idp}}</option>
+                    {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Descrição do Dente (ou Prótese):</label>
+                    <input type="text" class="form-control" id="orcadddenprot" name="denprot" required="1">
+                </div>
+                <div class="form-group">
+                    <label>Descrição do Procedimento:</label>
+                    <input type="text" class="form-control" id="orcadddescproc" name="descproc" required="1">
+                </div>
+                <div class="form-group">
+                  <label>ID do Dentista:</label>
+                  <input type="number" class="form-control" id="orcaddident" name="identista" required="1">
+                </div>
+                <div class="form-group">
+                  <label>Data da Avaliação:</label>
+                  <input type="date" class="form-control" id="orcadddataval" name="dataaval" required="1">
+                </div>
+                <div class="form-group">
+                  <label>Assinatura do Dentista:</label>
+                  <input type="text" class="form-control" id="orcaddass" name="ass" required="1">
+                </div>
+                <div class="form-group">
+                    <label>Valor:</label>
+                    <input type="text" class="form-control" id="insertval" name="valor" value="" required="1" readonly>
+                </div>
+               <div class="form-group">
+                  <button class="btn btn-primary" id="subaddorc" type="submit">Add Orçamento</button>
+               </div>
+            </form>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="closeaddorc" data-dismiss="modal">Close</button>
+         </div>
+      </div>
+   </div>
+</div>
+        </div>
+    </div>
+</div>
+<script>
+    function FuncInsert(e) {
+    calcins = parseInt(e.target.value)*10
+    ins = String(calcins)
+    insb = document.getElementById(ins).value
+    document.getElementById('insertval').value = insb
+    }
+    function FuncUpdate(e) {
+    calcupd = parseInt(e.target.value)*100
+    upd = String(calcupd)
+    updb = document.getElementById(upd).value
+    document.getElementById('updateval').value = updb
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+{% block title %} Pedido {% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col md-12">
+                <div class="jumbotron p-3">
+                    <h2>Dados dos <b>Pedidos de Orçamento</b></h2>
+                        <table class="table table-hover table-dark">
+                            <tr>
+                                <th>ID do Pedido</th>
+                                <th>Status do Pedido</th>
+                                <th>Motivo do Status</th>
+                                <th>Data do Pedido</th>
+                                <th>Data da Resposta</th>
+                            </tr>
+                            {% for row in pedidos %}
+                            <tr>
+                                <td>{{row.idped}}</td>
+                                <td>{{row.status}}</td>
+                                <td>{{row.motivo}}</td>
+                                <td>{{row.dataped}}</td>
+                                <td>{{row.datares}}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
