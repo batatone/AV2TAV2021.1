@@ -146,6 +146,8 @@ class Tests(unittest.TestCase):
         driver.find_element_by_id("deletcli2").click()
         self.assertRegexpMatches(self.close_alert_and_get_its_text(), r"^Deseja mesmo deletar[\s\S]$")
         self.assertEqual("Cliente removido :(", driver.find_element_by_id("flashcliente").text)
+        x = App.Cliente.query.get(2)
+        self.assertIsNone(x)
 
     def test_edit_id_invalido(self) :
         driver = self.driver
@@ -164,6 +166,8 @@ class Tests(unittest.TestCase):
         driver.find_element_by_id("delorc2").click()
         self.assertRegexpMatches(self.close_alert_and_get_its_text(), r"^Deseja mesmo deletar[\s\S]$")
         self.assertEqual(u"Orçamento removido :(", driver.find_element_by_id("flashorca").text)
+        x = App.Orcamento.query.get(2)
+        self.assertIsNone(x)
 
     def mocked_requests_get(*args, **kwargs) :
         class MockResponse():
