@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col md-12">
                 <div class="jumbotron p-3">
-                    <h2>Dados de <label id="allofthem">todos</label> os <b>Pedidos de Orçamento</b></h2>
+                    <h2>Dados do <b><label id="pedidosolo">Pedido {{pedidos.idped}}</label></b></h2>
                         <table class="table table-hover table-dark">
                             <tr>
                                 <th>ID do Pedido</th>
@@ -15,15 +15,13 @@
                                 <th>Data do Pedido</th>
                                 <th>Data da Resposta</th>
                             </tr>
-                            {% for row in pedidos %}
                             <tr>
-                                <td>{{row.idped}}</td>
-                                <td>{{row.status}}</td>
-                                <td>{{row.motivo}}</td>
-                                <td>{{row.dataped}}</td>
-                                <td>{{row.datares}}</td>
+                                <td>{{pedidos.idped}}</td>
+                                <td>{{pedidos.status}}</td>
+                                <td>{{pedidos.motivo}}</td>
+                                <td>{{pedidos.dataped}}</td>
+                                <td>{{pedidos.datares}}</td>
                             </tr>
-                            {% endfor %}
                         </table>
                     </div>
                 </div>

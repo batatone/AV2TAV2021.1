@@ -2,13 +2,14 @@
 {% include 'header.html' %}
 {% block title %} Dentista {% endblock %}
 {% block body %}
-<div class="container">
+<div class="container" xmlns="http://www.w3.org/1999/html">
     <div class="row">
         <div class="col md-12">
             <div class="jumbotron p-3">
                 <h2>Área para <b>Dentistas</b>
                     <button type="button"  class="btn btn-success float-right"
                 data-toggle="modal" data-target="#mymodal"  id="opaddorc">Faz Orçamento</button> </h2>
+
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
                 {% for message in messages %}
@@ -16,7 +17,7 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="close">
                         <span aria-hidden="true">x</span>
                     </button>
-                {{message}}
+                    <label id="flashorca">{{message}}</label>
                 </div>
                 {% endfor %}
                 {% endif %}
@@ -24,8 +25,9 @@
                     <form action="/api" method="POST">
                         <div class="form-group">
                             <div class="input-group mb-3">
-                                <input type="number" class="form-control" name="x" id="x" placeholder="Número do pedido mais recente" aria-label="Número do pedido mais recente" aria-describedby="send">
+                                <input type="number" class="form-control" name="x" id="x" placeholder="Número do pedido" aria-label="Número do pedido" aria-describedby="send">
                                 <button type="submit" class="btn btn-dark" id="send">&#10003;</button>
+                                <a href="/pedidos" type="button" class="btn btn-outline-dark" id="getall">Ver todos os pedidos respondidos</a>
                             </div>
                         </div>
                     </form>
@@ -52,7 +54,7 @@
                         <td>{{row.ass}}</td>
                         <td>{{row.valor}}</td>
                         <td>
-                            <a href="/updateo/{{row.idorc}}" id="opedorc{{row.idorc}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.idorc}}">Edit</a>
+                            <a href="/updateo/{{row.idorc}}" id="opedorc{{row.idorc}}" class="btn btn-warning btn-xs" onclick="vari({{row.idorc}})" data-toggle="modal" data-target="#modaledit{{row.idorc}}">Edit</a>
                             <a href="/deleteo/{{row.idorc}}" id="delorc{{row.idorc}}" class="btn btn-danger btn-xs" onclick="return confirm('Deseja mesmo deletar?')">Delete</a>
                         </td>
                     </tr>
@@ -102,7 +104,7 @@
                 </div>
                 <div class="form-group">
                     <label>Valor:</label>
-                    <input type="text" class="form-control" id="updateval" name="valor" value="{{row.valor}}" readonly>
+                    <input type="text" class="form-control" id="updateval{{row.idorc}}" name="valor" value="{{row.valor}}" required="1" readonly>
                 </div>
                 <div class="form-group">
                   <button class="btn btn-primary" id="subedorc" type="submit">Update</button>
@@ -122,7 +124,7 @@
    <div class="modal-dialog">
       <div class="modal-content">
          <div class="modal-header">
-            <h4 class="modal-title">Add Cliente</h4>
+            <h4 class="modal-title">Add Orçamento</h4>
          </div>
          <div class="modal-body">
             <form action="{{url_for('inserto')}}" method="POST">
@@ -168,7 +170,7 @@
             </form>
          </div>
          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" id="closeaddorc" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" id="closaddorc" data-dismiss="modal">Close</button>
          </div>
       </div>
    </div>
@@ -177,6 +179,9 @@
     </div>
 </div>
 <script>
+    function vari(a){
+    window.varable = a
+    }
     function FuncInsert(e) {
     calcins = parseInt(e.target.value)*10
     ins = String(calcins)
@@ -187,7 +192,7 @@
     calcupd = parseInt(e.target.value)*100
     upd = String(calcupd)
     updb = document.getElementById(upd).value
-    document.getElementById('updateval').value = updb
+    document.getElementById('updateval'+window.varable).value = updb
     }
 </script>
 {% endblock %}

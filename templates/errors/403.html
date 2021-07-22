@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Forbidden{% endblock %}
+{% block body %}
+<div class="content-section">
+  <div class="outer">
+    <div class="middle">
+      <div class="inner">
+        <div style="text-align: center">
+            <h1> Erro 403 </h1>
+            <h3> Você não tem poder aqui. </h3>
+            <hr class="intro-divider">
+            <a href="{{ url_for('Index') }}" class="btn btn-default btn-lg">
+                <i class="fa fa-home"></i>
+                Home
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

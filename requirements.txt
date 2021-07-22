@@ -1,9 +1,12 @@
 flask[async]
 flask-sqlalchemy
+mysql-connector-python
 mysqlclient
 Flask-WTF
-pytest flask
 requests
 aiohttp
 wheel
 pycryptodome
+sqlalchemy_utils
+pytest flask
+flask_testing
