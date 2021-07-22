@@ -1,10 +1,8 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
-import unittest, time, re
+import unittest
 from unittest import mock
 import requests
 
@@ -42,7 +40,6 @@ class Tests(unittest.TestCase):
         driver.find_element_by_id("dependente2").click()
         driver.find_element_by_id("subaddcli").click()
         self.assertEqual("Prontuário já cadastrado", driver.find_element_by_id("flashcliente").text)
-        time.sleep(5)
 
     def test_cpf_cadastrado_i(self):
         driver = self.driver
@@ -66,7 +63,6 @@ class Tests(unittest.TestCase):
         driver.find_element_by_id("dependente2").click()
         driver.find_element_by_id("subaddcli").click()
         self.assertEqual("CPF já cadastrado", driver.find_element_by_id("flashcliente").text)
-        time.sleep(5)
 
     def test_busca_ok(self) :
         driver = self.driver
@@ -93,6 +89,8 @@ class Tests(unittest.TestCase):
         driver.find_element_by_id("templano4").click()
         driver.find_element_by_id("cliednomep").clear()
         driver.find_element_by_id("cliednomep").send_keys("Particular")
+        driver.find_element_by_id("cliedtipop").clear()
+        driver.find_element_by_id("cliedtipop").send_keys("Pagar inteiro")
         driver.find_element_by_id("subedcli").click()
         self.assertEqual(u"Especiifique corretamente os dados do plano de saúde",
                          driver.find_element_by_id("flashcliente").text)
@@ -387,6 +385,36 @@ class Tests(unittest.TestCase):
         driver.find_element_by_id("x").send_keys("1495674569071465901756193478634958731465913847614646362357235725272357")
         driver.find_element_by_id("send").click()
         self.assertEqual(u"Não há resposta para este pedido ainda", driver.find_element_by_id("flashorca").text)
+
+    def test_not_found(self) :
+        result = requests.get("http://127.0.0.1:5000/naotem")
+
+        expected_status_code = 404
+        self.assertEqual(result.status_code, expected_status_code,
+                         "Expected status code = '{}', but got '{}'".format(expected_status_code, result.status_code))
+
+    def test_not_found(self) :
+        result = requests.get("http://127.0.0.1:5000/cpage/12345/")
+
+        expected_status_code = 500
+        self.assertEqual(result.status_code, expected_status_code,
+                         "Expected status code = '{}', but got '{}'".format(expected_status_code, result.status_code))
+
+    def test_not_found(self) :
+        result = requests.get("http://127.0.0.1:5000/insert")
+
+        expected_status_code = 405
+        self.assertEqual(result.status_code, expected_status_code,
+                         "Expected status code = '{}', but got '{}'".format(expected_status_code, result.status_code))
+
+
+
+    def test_foi_ok(self) :
+        result = requests.get("http://127.0.0.1:5000/")
+
+        expected_status_code = 200
+        self.assertEqual(result.status_code, expected_status_code,
+                         "Expected status code = '{}', but got '{}'".format(expected_status_code, result.status_code))
 
 
     def is_element_present(self, how, what):

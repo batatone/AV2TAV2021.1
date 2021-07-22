@@ -1,4 +1,3 @@
-import urllib
 import requests
 from flask import Flask, render_template, request, redirect, url_for, flash, Blueprint, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -8,9 +7,12 @@ import asyncio
 import aiohttp
 import rsa
 from base64 import b64encode
-import json
 
 def pegalocal():
+    print('Use o modo de teste para rodar os scripts do arquivo tests.py')
+    print('')
+    print('Para usar o modo de teste basta inserir teste no espaço do nome do banco de dados')
+    print('')
     print('Deixe os campos abaixo em branco para usar os valores padrão')
     print('')
     print('Insira o usuario MySQL:')
@@ -235,7 +237,7 @@ def tabgen():
         db.session.add(tabelao4)
         db.session.commit()
 tabgen()
-if dbname=="teste":
+if str.upper(dbname)=="TESTE":
     my_cli = Cliente("Carlos", "12345678910", "S", "Unimed", "Teste", "1", "2021-06-27", "N", "2021-07-31")
     db.session.add(my_cli)
     db.session.commit()
